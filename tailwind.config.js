@@ -4,6 +4,7 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{ts,tsx,jsx,js}",
   ],
   theme: {
     extend: {
@@ -14,5 +15,31 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["[data-theme=light]"],
+          primary: "#34d399",
+
+          secondary: "#c85a6a",
+
+          accent: "#e0f2fe",
+
+          neutral: "#04010f",
+
+          "base-100": "#f5f5f4",
+
+          info: "#00adff",
+
+          success: "#26e48a",
+
+          warning: "#a27200",
+
+          error: "#ff1f4a",
+        },
+      },
+    ],
+  },
 };
