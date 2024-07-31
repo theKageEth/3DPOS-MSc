@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { Tiramisu } from "./models/Tiramisu";
 import { Burger } from "./models/Burger";
-import { Pizza } from "./models/pizza";
+import { Pizza } from "./models/Pizza";
 
 const Experience = ({ showTiramisu, showBurger, showPizza }) => {
   const Three = useThree();
