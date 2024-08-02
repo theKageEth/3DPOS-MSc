@@ -32,30 +32,6 @@ const userSchema = new mongoose.Schema(
 
 export const User = mongoose.models?.User || mongoose.model("User", userSchema);
 
-const productSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    description: {
-      type: String,
-    },
-    category: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
-
-export const Product =
-  mongoose.models?.Product || mongoose.model("Product", productSchema);
-
 const orderSchema = new mongoose.Schema(
   {
     userId: {

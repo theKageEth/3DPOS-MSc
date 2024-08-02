@@ -54,8 +54,9 @@ const Scene = () => {
           position: [0, 0, 5],
         }}
       >
-        <ambientLight intensity={2} />
-        <directionalLight position={[0.5, 0, 0]} intensity={5} />
+        <ambientLight intensity={3} />
+        <directionalLight position={[1, 0, 0]} intensity={5} castShadow />
+
         <Experience
           showTiramisu={visibleModel === "tiramisu"}
           showBurger={visibleModel === "burger"}

@@ -1,5 +1,5 @@
 const Cart = ({ cart, addToCart, removeFromCart, deleteFromCart }) => (
-  <div className="absolute top-10 right-10 bg-white text-black p-6 rounded-lg shadow-lg z-20">
+  <div className="absolute top-10 right-10 bg-white text-black p-6 rounded-lg shadow-lg z-50">
     <h2 className="text-xl font-bold mb-4">Cart</h2>
     <ul className="space-y-2">
       {Object.keys(cart).length === 0 ? (

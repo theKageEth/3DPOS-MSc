@@ -6,7 +6,7 @@ const Scene = dynamic(() => import("@/components/threejs/Scene"), {
 const Menu = () => {
   return (
     <>
-      <div className="w-[100dvw] h-[100dvh] fixed top-0 overflow-hidden left-0 bg-fuchsia-100">
+      <div className="w-[100dvw] h-[100dvh] fixed top-0 overflow-hidden left-0 ">
         <Scene />
       </div>
     </>
