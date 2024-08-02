@@ -47,6 +47,8 @@ const Scene = () => {
   return (
     <>
       <Canvas
+        eventPrefix="client"
+        className="touch-none "
         camera={{
           fov: 75,
           near: 0.1,
