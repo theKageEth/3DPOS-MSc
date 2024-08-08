@@ -13,8 +13,15 @@ import { useThree } from "@react-three/fiber";
 import { Tiramisu } from "./models/Tiramisu";
 import { Burger } from "./models/Burger";
 import { Pizza } from "./models/Pizza";
+const MODEL_COMPONENTS = {
+  Tiramisu: Tiramisu,
+  Burger: Burger,
+  Pizza: Pizza,
+  // Add other models as needed
+};
 
-const Experience = ({ showTiramisu, showBurger, showPizza }) => {
+const Experience = ({ visibleModel }) => {
+  const ModelComponent = MODEL_COMPONENTS[visibleModel];
   const Three = useThree();
   const viewport = Three.viewport;
   const baseScaleFactor = viewport.width / 4;
@@ -36,26 +43,7 @@ const Experience = ({ showTiramisu, showBurger, showPizza }) => {
         azimuth={[-2, 2]}
       >
         <group scale={scaleFactor} position={[0, 1, 0]}>
-          <group
-            visible={showTiramisu}
-            scale={1.5}
-            rotation={[Math.PI * 0.1, 0, 0]}
-          >
-            <Tiramisu />
-          </group>
-
-          <group visible={showBurger} position={[0, -1, 0]}>
-            <Burger />
-          </group>
-
-          <group
-            visible={showPizza}
-            scale={6}
-            rotation={[Math.PI * 0.1, 0, 0]}
-            position={[0, -0.5, 0]}
-          >
-            <Pizza />
-          </group>
+          {ModelComponent && <ModelComponent />}
         </group>
       </PresentationControls>
       <ContactShadows position-y={-1.4} opacity={0.4} scale={5} blur={2.4} />

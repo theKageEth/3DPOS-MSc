@@ -1,14 +1,9 @@
 import { AiOutlinePlus } from "react-icons/ai";
-import { useSession } from "next-auth/react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import React, { useEffect, useRef } from "react";
+import { PRODUCTS } from "@/lib/helpers/contants";
 
-const Menu = ({ visibleModel, showModel, addToCart }) => {
-  const session = useSession();
-  useEffect(() => {
-    console.log(session);
-  }, []);
-
+const Menu = ({ showModel, addToCart }) => {
   const scrollContainerRef = useRef(null);
 
   const scrollLeft = () => {
@@ -40,47 +35,27 @@ const Menu = ({ visibleModel, showModel, addToCart }) => {
         ref={scrollContainerRef}
         className="absolute bottom-0 left-0 w-screen flex items-center justify-center overflow-x-auto  bg-transparent"
       >
-        <div className="flex space-x-4 p-2 ">
-          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded hover:bg-yellow-300">
-            <button
-              className="text-white text-sm"
-              onClick={() => showModel("tiramisu")}
+        <div className="flex space-x-4 p-2">
+          {PRODUCTS.map((product) => (
+            <div
+              key={product.name}
+              className="hover:scale-110 ease-linear transition flex items-center space-x-2 bg-gray-800 p-2 rounded text-center"
             >
-              tiramisu
-            </button>
-            <AiOutlinePlus
-              className="bg-green-400 cursor-pointer text-white text-xl hover:text-gray-400 transition"
-              onClick={() => addToCart("tiramisu")}
-            />
-          </div>
-          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded hover:bg-yellow-300">
-            <button
-              className="text-white text-sm"
-              onClick={() => showModel("burger")}
-            >
-              burger
-            </button>
-            <AiOutlinePlus
-              className="bg-green-400 cursor-pointer text-white text-xl hover:text-gray-400 transition"
-              onClick={() => addToCart("burger")}
-            />
-          </div>
-          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded hover:bg-yellow-300">
-            <button
-              className="text-white text-sm"
-              onClick={() => showModel("pizza")}
-            >
-              pizza
-            </button>
-            <AiOutlinePlus
-              className="bg-green-400 cursor-pointer text-white text-xl hover:text-gray-400 transition"
-              onClick={() => addToCart("pizza")}
-            />
-          </div>
-          {/* Add more items as needed */}
+              <button
+                className="text-white text-sm  "
+                onClick={() => showModel(product.name)}
+              >
+                <p>{product.name}</p>
+                <p className="text-white text-xs">£{product.price}</p>
+              </button>
+              <AiOutlinePlus
+                className="bg-green-400 cursor-pointer text-white text-xl hover:text-gray-400 transition"
+                onClick={() => addToCart(product.name)}
+              />
+            </div>
+          ))}
         </div>
       </div>
-
       {/* Right Arrow Button */}
       <div className="absolute right-5 bottom-12 h-full flex items-end z-10">
         <button

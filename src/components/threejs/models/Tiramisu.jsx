@@ -3,7 +3,13 @@ import { useGLTF } from "@react-three/drei";
 export function Tiramisu(props) {
   const { nodes, materials } = useGLTF("/models/tiramisu.glb");
   return (
-    <group {...props} dispose={null}>
+    <group
+      {...props}
+      dispose={null}
+      scale={1.2}
+      position={[0, 0, 0]}
+      rotation={[Math.PI * 0.1, 0, 0]}
+    >
       <mesh
         castShadow
         receiveShadow

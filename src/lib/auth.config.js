@@ -40,7 +40,7 @@ export const authConfig = {
       }
 
       if (isOnLoginPage && user) {
-        return NextResponse.redirect(new URL("/menu", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
       }
 
       return NextResponse.next();

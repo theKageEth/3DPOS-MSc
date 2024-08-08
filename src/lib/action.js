@@ -1,46 +1,57 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { User } from "./models";
+import { User, Order } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcryptjs";
+import { convertCartToArray } from "./helpers/functions";
 
-export const addPost = async (prevState, formData) => {
-  const { title, desc, userId, slug } = Object.fromEntries(formData);
+export const addOrder = async (prevState, formData) => {
+  const { products, totalAmount, paymentMethod, userId } =
+    Object.fromEntries(formData);
 
   try {
     connectToDb();
-    const newPost = new Post({
-      title,
-      desc,
+
+    // Retrieve the username from the User model
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const parsedCart = JSON.parse(products);
+    const formattedCart = convertCartToArray(parsedCart);
+
+    // Create a new order
+    const newOrder = new Order({
       userId,
-      slug,
+      username: user.username, // Include the username
+      totalAmount,
+      paymentMethod,
+      products: formattedCart, // Convert cart from JSON string to Map
     });
 
-    await newPost.save();
-    console.log("saved to db");
-    revalidatePath("/blog");
+    const savedOrder = await newOrder.save();
+
+    revalidatePath("/orders");
+    revalidatePath("/menu");
     revalidatePath("/admin");
+    return { success: true };
   } catch (err) {
     console.log(err);
-    return { error: "Its already Booked!" };
+    return { error: "Failed to place order. Please try again." };
   }
 };
 
-export const deletePost = async (formData) => {
-  const { id } = Object.fromEntries(formData);
-
+export const deleteOrderById = async (orderId) => {
   try {
-    connectToDb();
-
-    await Post.findByIdAndDelete(id);
-    console.log("deleted from db");
-    revalidatePath("/blog");
+    await Order.findByIdAndDelete(orderId);
+    revalidatePath("/orders");
     revalidatePath("/admin");
+    return { success: true };
   } catch (err) {
-    console.log(err);
-    return { error: "Something went wrong!" };
+    console.error("Error deleting order:", err);
+    return { error: "Failed to delete order." };
   }
 };
 

@@ -1,6 +1,7 @@
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -14,7 +15,10 @@ export default function RootLayout({ children }) {
     <html data-theme="light" lang="en">
       <body className={quicksand.className}>
         <SessionProvider>
-          <div className="relative overflow-x-hidden">{children}</div>
+          <div className="relative overflow-x-hidden">
+            {children}
+            <Toaster />
+          </div>
         </SessionProvider>
       </body>
     </html>

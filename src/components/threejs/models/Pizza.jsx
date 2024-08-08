@@ -3,7 +3,13 @@ import { useGLTF } from "@react-three/drei";
 export function Pizza(props) {
   const { nodes, materials } = useGLTF("/models/pizza.glb");
   return (
-    <group {...props} dispose={null}>
+    <group
+      {...props}
+      dispose={null}
+      scale={6}
+      rotation={[Math.PI * 0.1, 0, 0]}
+      position={[0, 0, 0]}
+    >
       <mesh
         castShadow
         receiveShadow
