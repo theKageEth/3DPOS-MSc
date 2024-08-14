@@ -21,7 +21,7 @@ const Menu = ({ showModel, addToCart }) => {
   return (
     <div className="absolute bottom-0 w-screen h-[150px]   text-green-900 z-0">
       {/* Left Arrow Button */}
-      <div className="absolute left-5 bottom-12 h-full flex items-end z-10">
+      <div className="absolute left-5 bottom-20 h-full flex items-end z-10">
         <button
           onClick={scrollLeft}
           className="bg-gray-800 p-2 rounded-full hover:bg-gray-600 transition"
@@ -57,7 +57,7 @@ const Menu = ({ showModel, addToCart }) => {
         </div>
       </div>
       {/* Right Arrow Button */}
-      <div className="absolute right-5 bottom-12 h-full flex items-end z-10">
+      <div className="absolute right-5 bottom-20 h-full flex items-end z-10">
         <button
           onClick={scrollRight}
           className="bg-gray-800 p-2 rounded-full hover:bg-gray-600 transition"

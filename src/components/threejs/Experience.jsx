@@ -13,10 +13,15 @@ import { useThree } from "@react-three/fiber";
 import { Tiramisu } from "./models/Tiramisu";
 import { Burger } from "./models/Burger";
 import { Pizza } from "./models/Pizza";
+
+import { IceCream } from "./models/IceCream";
+import { Salad } from "./models/Salad";
 const MODEL_COMPONENTS = {
   Tiramisu: Tiramisu,
   Burger: Burger,
   Pizza: Pizza,
+  IceCream: IceCream,
+  Salad: Salad,
   // Add other models as needed
 };
 

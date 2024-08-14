@@ -56,4 +56,4 @@ export function Pizza(props) {
   );
 }
 
-useGLTF.preload("models/pizza.glb");
+useGLTF.preload("/models/pizza.glb");
