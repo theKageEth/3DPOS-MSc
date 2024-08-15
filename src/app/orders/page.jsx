@@ -3,6 +3,7 @@ import { getAllOrders } from "@/lib/data";
 
 const OrdersPage = async () => {
   const data = await getAllOrders();
+
   return (
     <>
       <OrderData orders={data} />

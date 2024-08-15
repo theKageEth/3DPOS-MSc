@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse, NextRequest } from "next/server";
 
 export const authConfig = {

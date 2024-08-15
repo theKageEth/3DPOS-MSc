@@ -9,18 +9,30 @@ const Cart = ({ cart, addToCart, removeFromCart, deleteFromCart, userId }) => {
   const [state, FormState] = useFormState(addOrder, null);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
 
-  // Calculate the total price
+  // Calculate total price and prepare product details
+  const productDetails = {};
   const totalPrice = Object.keys(cart).reduce((total, itemName) => {
     const product = PRODUCTS.find((product) => product.name === itemName);
-    const itemPrice = product ? product.price * cart[itemName] : 0;
-    return total + itemPrice;
+    if (product) {
+      const itemTotal = product.price * cart[itemName];
+      productDetails[itemName] = {
+        quantity: cart[itemName],
+        price: product.price,
+        total: itemTotal,
+      };
+      return total + itemTotal;
+    }
+    return total;
   }, 0);
+
   const [paymentMethod, setPaymentMethod] = useState("Cash");
 
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
   };
-
+  useEffect(() => {
+    console.log(cart);
+  }, [cart]);
   useEffect(() => {
     if (state?.success) {
       setButtonDisabled(true);
@@ -53,38 +65,48 @@ const Cart = ({ cart, addToCart, removeFromCart, deleteFromCart, userId }) => {
 
   return (
     <>
-      <div className="absolute top-10 right-20 bg-white text-black p-6 rounded-lg shadow-lg z-50">
-        <h2 className="text-xl font-bold mb-4">Cart</h2>
-        <ul className="space-y-2">
+      <div className="absolute top-10 right-0 md:right-10 lg:right-20 bg-white text-black p-6 rounded-lg shadow-lg z-50 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center ">Cart</h2>
+        <ul className="space-y-4">
           {Object.keys(cart).length === 0 ? (
-            <li>Your cart is empty</li>
+            <li className="text-center text-gray-500">Your cart is empty</li>
           ) : (
             Object.keys(cart).map((item) => (
               <li
                 key={item}
-                className="flex items-center justify-between gap-2"
+                className="flex flex-col  items-start justify-between gap-2 border-b border-gray-200 pb-4"
               >
-                <span className="list-disc list-inside">{item}</span>
-                <div className="flex items-center space-x-2">
-                  <button
-                    className="bg-blue-500 py-1 px-2 rounded hover:bg-blue-400"
-                    onClick={() => addToCart(item)}
-                  >
-                    +
-                  </button>
-                  <span>{cart[item]}</span>
-                  <button
-                    className="bg-red-500 py-1 px-2 rounded hover:bg-red-400"
-                    onClick={() => removeFromCart(item)}
-                  >
-                    -
-                  </button>
-                  <button
-                    className="py-2 px-2 rounded hover:bg-red-600"
-                    onClick={() => deleteFromCart(item)}
-                  >
-                    <FaTrashAlt />
-                  </button>
+                <div className="flex items-center justify-between w-full ">
+                  <span className="text-lg font-bold">{item}</span>
+                  <div className="flex items-center space-x-2 ml-2">
+                    <button
+                      className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                      onClick={() => addToCart(item)}
+                    >
+                      +
+                    </button>
+                    <span className="text-lg font-medium">{cart[item]}</span>
+                    <button
+                      className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+                      onClick={() => removeFromCart(item)}
+                    >
+                      -
+                    </button>
+                    <button
+                      className=" text-black py-1 px-2 rounded hover:scale-150 ease-in-out transition duration-500  f "
+                      onClick={() => deleteFromCart(item)}
+                    >
+                      <FaTrashAlt className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                <div className=" my-2  flex flex-col justify-center ">
+                  <div className="text-sm font-medium text-gray-700">
+                    Price: ${productDetails[item]?.price.toFixed(2)}
+                  </div>
+                  <div className="text-sm font-medium text-gray-700">
+                    Total: ${productDetails[item]?.total.toFixed(2)}
+                  </div>
                 </div>
               </li>
             ))
@@ -92,23 +114,23 @@ const Cart = ({ cart, addToCart, removeFromCart, deleteFromCart, userId }) => {
         </ul>
         {/* Display the total price */}
         {Object.keys(cart).length > 0 && (
-          <div className="mt-4 text-lg font-bold">
+          <div className="mt-4 text-lg font-bold border-t border-gray-300 pt-2 text-right">
             Total Price: ${totalPrice.toFixed(2)}
           </div>
         )}
         {/* Order form */}
         {Object.keys(cart).length > 0 && (
           <form
-            className="pt-4 flex flex-col gap-1 bg-gray-100 p-4 rounded-lg mt-4"
+            className="pt-4 flex flex-col gap-4 bg-gray-100 p-4 rounded-lg mt-4"
             action={FormState}
           >
             <h3 className="text-xl mb-4 font-bold text-center">
               Place Your Order
             </h3>
-            <div className="mb-2">
+            <div className="mb-4">
               <label
                 htmlFor="paymentMethod"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-2 text-gray-700"
               >
                 Payment Method
               </label>
@@ -117,14 +139,13 @@ const Cart = ({ cart, addToCart, removeFromCart, deleteFromCart, userId }) => {
                 name="paymentMethod"
                 value={paymentMethod}
                 onChange={handlePaymentMethodChange}
-                className="rounded border-gray-300 w-full px-3 py-2"
+                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
               >
                 <option value="Cash">Cash</option>
                 <option value="Card">Card</option>
               </select>
             </div>
             <input type="hidden" name="userId" value={userId} />
-
             <input type="hidden" name="totalAmount" value={totalPrice} />
             <input type="hidden" name="products" value={JSON.stringify(cart)} />
             <Submit />

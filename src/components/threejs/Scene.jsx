@@ -15,6 +15,9 @@ const Scene = () => {
   const [cartVisible, setCartVisible] = useState(false);
   const [cart, setCart] = useState([]);
   const session = useSession();
+  const isAuthenticated = session.status === "authenticated";
+  const isLoading = session.status === "loading";
+
   const showModel = (model) => {
     setVisibleModel(model);
   };
@@ -23,9 +26,12 @@ const Scene = () => {
       ...prev,
       [model]: (prev[model] || 0) + 1,
     }));
-    toast.success("Successfully added!");
+    toast.success("Successfully added!", { duration: 700 });
   };
-
+  const totalItemsInCart = Object.values(cart).reduce(
+    (total, count) => total + count,
+    0
+  );
   const removeFromCart = (model) => {
     setCart((prev) => {
       const newCart = { ...prev };
@@ -36,7 +42,7 @@ const Scene = () => {
       }
       return newCart;
     });
-    toast.success("Items Removed!");
+    toast.success("Items Removed!", { duration: 500 });
   };
 
   const deleteFromCart = (model) => {
@@ -45,7 +51,7 @@ const Scene = () => {
       delete newCart[model];
       return newCart;
     });
-    toast.success("Deleted!");
+    toast.success("Deleted!", { duration: 500 });
   };
   const toggleCartVisibility = () => {
     setCartVisible((prev) => !prev);
@@ -69,7 +75,12 @@ const Scene = () => {
         <Experience visibleModel={visibleModel} />
       </Canvas>
 
-      <Menu showModel={showModel} addToCart={addToCart} />
+      <Menu
+        showModel={showModel}
+        addToCart={addToCart}
+        cart={cart}
+        isAuthenticated={isAuthenticated}
+      />
       {cartVisible && (
         <Cart
           cart={cart}
@@ -79,15 +90,27 @@ const Scene = () => {
           userId={session?.data?.user?.id}
         />
       )}
-      <button
-        className="bg-blue-600 py-2 px-4 rounded hover:bg-blue-500 transition absolute top-5 right-5 z-10"
-        onClick={toggleCartVisibility}
-      >
-        {cartVisible ? <ImCross /> : <FaShoppingCart />}
-      </button>
+
+      {isAuthenticated && (
+        <button
+          className="py-2 px-4 rounded absolute top-5 right-5 z-50 hover:text-content hover:scale-150 ease-in-out transition duration-500 flex items-center space-x-2"
+          onClick={toggleCartVisibility}
+        >
+          {cartVisible ? (
+            <ImCross className="h-8 w-8" />
+          ) : (
+            <>
+              <FaShoppingCart className="h-8 w-8" />
+              <div className="text-black font-bold text-lg">
+                {totalItemsInCart}
+              </div>
+            </>
+          )}
+        </button>
+      )}
       <button
         onClick={() => signOut()}
-        className="font-bold py-2 px-4 rounded  transition absolute top-5 left-5 z-10"
+        className="font-extrabold py-2 px-4 rounded  transition absolute top-5 left-5 z-10 text-2xl"
       >
         <span className=" ">{session?.data?.user?.username || ""}</span>
       </button>

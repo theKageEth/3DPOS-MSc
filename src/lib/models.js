@@ -61,16 +61,14 @@ const orderSchema = new mongoose.Schema(
       enum: ["Cash", "Card"],
       required: true,
     },
-    products: {
-      type: [
-        {
-          name: { type: String, required: true },
-          quantity: { type: Number, required: true },
-          _id: false,
-        },
-      ],
-      required: true,
-    },
+    products: [
+      {
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+        total: { type: Number, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { DeleteButton } from "@/components/orderPage/DeleteButton";
 import PageControl from "./PageControl";
+import PrintButton from "./PrintButton";
 
 const OrderData = ({ orders }) => {
   const [allOrders, setAllOrders] = useState([]);
@@ -60,7 +61,7 @@ const OrderData = ({ orders }) => {
           <p>No orders found.</p>
         ) : (
           <div className="overflow-x-auto h-96 text-center">
-            <table className="table table-xs table-pin-rows ">
+            <table className="table table-xs table-pin-cols ">
               <thead>
                 <tr>
                   <th></th>
@@ -75,35 +76,55 @@ const OrderData = ({ orders }) => {
                   <th></th>
                 </tr>
               </thead>
-              <tbody className="table-pin-cols ">
-                {currentOrders.map((order, index) => (
+              <tbody>
+                {currentOrders.map((order, orderIndex) => (
                   <tr key={order._id}>
-                    <th>{index + 1}</th>
+                    <th>{orderIndex + 1}</th>
                     <td>{order._id}</td>
                     <td>{order.userId}</td>
-                    <td>{order.username}</td>
+                    <th>{order.username}</th>
                     <td>${order.totalAmount.toFixed(2)}</td>
                     <td>{order.paymentMethod}</td>
                     <td>{order.status}</td>
                     <td>
-                      {order.products.map((product, index) => (
-                        <div key={index}>
-                          {product.name} - {product.quantity}
-                        </div>
-                      ))}
+                      <div className="overflow-x-auto">
+                        <table className="table table-xs">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {order.products.map((product, productIndex) => (
+                              <tr key={productIndex}>
+                                <td>{product.name}</td>
+                                <td>{product.quantity}</td>
+                                <td>${product.price.toFixed(2)}</td>
+                                <td>
+                                  $
+                                  {(product.quantity * product.price).toFixed(
+                                    2
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </td>
                     <td>
                       <DeleteButton orderID={order._id} />
+                      <PrintButton order={order} />
                     </td>
-                    <th></th>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
                 <tr>
-                  <th>
-                    <td></td>
-                  </th>
+                  <th></th>
                 </tr>
               </tfoot>
             </table>

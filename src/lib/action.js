@@ -26,7 +26,7 @@ export const addOrder = async (prevState, formData) => {
     const newOrder = new Order({
       userId,
       username: user.username, // Include the username
-      totalAmount,
+      totalAmount: parseFloat(totalAmount),
       paymentMethod,
       products: formattedCart, // Convert cart from JSON string to Map
     });

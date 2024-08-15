@@ -1,13 +1,6 @@
 import mongoose from "mongoose";
 
-let MONGODB_URI;
-
 const connection = {};
-if (process.env.NODE_ENV === "development") {
-  MONGODB_URI = process.env.DEV_MONGODB_URI;
-} else {
-  MONGODB_URI = process.env.MONGODB_URI;
-}
 
 export const connectToDb = async () => {
   try {
