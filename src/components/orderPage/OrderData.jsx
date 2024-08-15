@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import { DeleteButton } from "@/components/orderPage/DeleteButton";
 import PageControl from "./PageControl";
 import PrintButton from "./PrintButton";
+import RequestPrinter from "./RequestPrinter";
 
 const OrderData = ({ orders }) => {
   const [allOrders, setAllOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [usernameFilter, setUsernameFilter] = useState("");
+  const [device, setDevice] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
@@ -56,7 +58,10 @@ const OrderData = ({ orders }) => {
           value={usernameFilter}
           onChange={handleInputChange}
           className="mb-4 p-2 border rounded"
-        />
+        />{" "}
+        <RequestPrinter setDevice={setDevice} />{" "}
+        <p>Device Name: {device?.productName}</p>
+        <p>Serial Number: {device?.serialNumber}</p>
         {currentOrders.length === 0 ? (
           <p>No orders found.</p>
         ) : (
@@ -117,7 +122,7 @@ const OrderData = ({ orders }) => {
                     </td>
                     <td>
                       <DeleteButton orderID={order._id} />
-                      <PrintButton order={order} />
+                      <PrintButton order={order} device={device} />
                     </td>
                   </tr>
                 ))}
