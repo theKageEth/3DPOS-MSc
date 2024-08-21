@@ -1,11 +1,32 @@
 "use server";
-
+import { connect } from "node:net";
 import { revalidatePath } from "next/cache";
 import { User, Order } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcryptjs";
 import { convertCartToArray } from "./helpers/functions";
+import { redirect } from "next/navigation";
+
+export const NetworkPrint = async (data) => {
+  const conn = connect(
+    {
+      host: "192.168.123.100", // Printer's IP address
+      port: 9100, // Standard port for network printers
+      timeout: 5000, // Connection timeout in milliseconds
+    },
+    () => {
+      conn.write(Buffer.from(data), () => {
+        console.log("Print data sent successfully.");
+        conn.destroy(); // Close the connection
+      });
+    }
+  );
+
+  conn.on("error", (err) => {
+    console.error("Error connecting to the printer:", err);
+  });
+};
 
 export const addOrder = async (prevState, formData) => {
   const { products, totalAmount, paymentMethod, userId } =
@@ -142,6 +163,11 @@ export const login = async (currentState, formData) => {
 
   try {
     await signIn("credentials", { username, password });
+    revalidatePath("/orders");
+    revalidatePath("/menu");
+    revalidatePath("/admin");
+    revalidatePath("/");
+    redirect("/");
   } catch (err) {
     console.log(err);
     if (err.type === "CallbackRouteError" || err.code === "credentials") {

@@ -4,6 +4,7 @@ import { DeleteButton } from "@/components/orderPage/DeleteButton";
 import PageControl from "./PageControl";
 import PrintButton from "./PrintButton";
 import RequestPrinter from "./RequestPrinter";
+import NetworkPrintButton from "./NetworkPrintButton";
 
 const OrderData = ({ orders }) => {
   const [allOrders, setAllOrders] = useState([]);
@@ -59,7 +60,7 @@ const OrderData = ({ orders }) => {
           onChange={handleInputChange}
           className="mb-4 p-2 border rounded"
         />{" "}
-        <RequestPrinter setDevice={setDevice} />{" "}
+        <RequestPrinter setDevice={setDevice} />
         <p>Device Name: {device?.productName}</p>
         <p>Serial Number: {device?.serialNumber}</p>
         {currentOrders.length === 0 ? (
@@ -123,6 +124,7 @@ const OrderData = ({ orders }) => {
                     <td>
                       <DeleteButton orderID={order._id} />
                       <PrintButton order={order} device={device} />
+                      <NetworkPrintButton order={order} />
                     </td>
                   </tr>
                 ))}
